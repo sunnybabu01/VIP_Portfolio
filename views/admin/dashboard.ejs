@@ -1,0 +1,295 @@
+<%- include('../partials/admin_header') %>
+
+<!-- Script to include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="space-y-8">
+  
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="font-heading font-extrabold text-2xl sm:text-3xl text-gray-900 dark:text-white">Dashboard Overview</h1>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Real-time metrics, website visitor analytics, and inbox summaries.</p>
+    </div>
+    
+    <!-- Refresh Button -->
+    <button onclick="window.location.reload()" class="inline-flex items-center px-4 py-2 text-xs font-bold text-gray-700 bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
+      <i class="fas fa-arrows-rotate mr-2"></i> Refresh Data
+    </button>
+  </div>
+
+  <!-- METRIC CARDS ROW -->
+  <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+    <!-- Card 1: Projects -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800/80 shadow-sm flex items-center space-x-4">
+      <div class="w-10 h-10 rounded-xl bg-blue-100/80 text-blue-600 dark:bg-blue-950/20 dark:text-blue-500 flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-laptop-code text-base"></i>
+      </div>
+      <div>
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Projects</span>
+        <strong class="text-xl font-extrabold font-heading text-gray-900 dark:text-white block mt-0.5"><%= totalProjects %></strong>
+      </div>
+    </div>
+
+    <!-- Card 2: Skills -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800/80 shadow-sm flex items-center space-x-4">
+      <div class="w-10 h-10 rounded-xl bg-purple-100/80 text-purple-600 dark:bg-purple-950/20 dark:text-purple-500 flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-brain text-base"></i>
+      </div>
+      <div>
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Skills</span>
+        <strong class="text-xl font-extrabold font-heading text-gray-900 dark:text-white block mt-0.5"><%= totalSkills %></strong>
+      </div>
+    </div>
+
+    <!-- Card 3: Certificates -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800/80 shadow-sm flex items-center space-x-4">
+      <div class="w-10 h-10 rounded-xl bg-yellow-100/80 text-yellow-600 dark:bg-yellow-950/20 dark:text-yellow-500 flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-award text-base"></i>
+      </div>
+      <div>
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Certificates</span>
+        <strong class="text-xl font-extrabold font-heading text-gray-900 dark:text-white block mt-0.5"><%= totalCertificates %></strong>
+      </div>
+    </div>
+
+    <!-- Card 4: Messages -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800/80 shadow-sm flex items-center space-x-4">
+      <div class="w-10 h-10 rounded-xl bg-red-100/80 text-red-600 dark:bg-red-950/20 dark:text-red-500 flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-envelope text-base"></i>
+      </div>
+      <div>
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Messages</span>
+        <strong class="text-xl font-extrabold font-heading text-gray-900 dark:text-white block mt-0.5"><%= totalMessages %></strong>
+      </div>
+    </div>
+
+    <!-- Card 5: Visitors -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800/80 shadow-sm col-span-2 lg:col-span-1 flex items-center space-x-4">
+      <div class="w-10 h-10 rounded-xl bg-green-100/80 text-green-600 dark:bg-green-950/20 dark:text-green-500 flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-users-viewfinder text-base"></i>
+      </div>
+      <div>
+        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Total Visits</span>
+        <strong class="text-xl font-extrabold font-heading text-gray-900 dark:text-white block mt-0.5"><%= totalVisitors %></strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISITOR CHARTS GRID -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    
+    <!-- Chart 1: Daily Visitor Trends -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-800/80 shadow-sm lg:col-span-8 flex flex-col justify-between">
+      <div class="mb-4">
+        <h3 class="font-heading font-bold text-sm text-gray-800 dark:text-white">Visitor Traffic Trends</h3>
+        <span class="text-[10px] text-gray-400 block mt-0.5">Visits count logged over the last 7 calendar days.</span>
+      </div>
+      <div class="h-64 sm:h-72">
+        <canvas id="visitorTrendsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 2: Contact requests analytics -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-800/80 shadow-sm lg:col-span-4 flex flex-col justify-between">
+      <div class="mb-4">
+        <h3 class="font-heading font-bold text-sm text-gray-800 dark:text-white">Message Read Status</h3>
+        <span class="text-[10px] text-gray-400 block mt-0.5">Discussions, collaboration proposals status ratio.</span>
+      </div>
+      <div class="h-64 sm:h-72 flex items-center justify-center">
+        <canvas id="messageAnalyticsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 3: Top Viewed Projects -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-800/80 shadow-sm lg:col-span-6 flex flex-col justify-between">
+      <div class="mb-4">
+        <h3 class="font-heading font-bold text-sm text-gray-800 dark:text-white">Project Popularity</h3>
+        <span class="text-[10px] text-gray-400 block mt-0.5">Top viewed portfolio projects metrics comparison.</span>
+      </div>
+      <div class="h-64">
+        <canvas id="projectViewsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 4: Countrywise Traffic -->
+    <div class="bg-white dark:bg-gray-900 p-5 rounded-3xl border border-gray-200 dark:border-gray-800/80 shadow-sm lg:col-span-6 flex flex-col justify-between">
+      <div class="mb-4">
+        <h3 class="font-heading font-bold text-sm text-gray-800 dark:text-white">Top Visitor Geographies</h3>
+        <span class="text-[10px] text-gray-400 block mt-0.5">Visitor distribution by geographical country resolution.</span>
+      </div>
+      <div class="h-64">
+        <canvas id="countryTrafficChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RECENT ACTIVITIES (INBOX SUMMARY) -->
+  <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800/80 rounded-3xl p-5 shadow-sm">
+    <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4 mb-4">
+      <div>
+        <h3 class="font-heading font-bold text-sm text-gray-800 dark:text-white">Recent Activities</h3>
+        <span class="text-[10px] text-gray-400 block mt-0.5">Newest messages received via portfolio contact forms.</span>
+      </div>
+      <a href="/admin/messages" class="text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">View Inbox</a>
+    </div>
+
+    <div class="space-y-4">
+      <% if (recentActivities && recentActivities.length > 0) { %>
+        <% recentActivities.forEach(msg => { %>
+          <div class="flex items-start justify-between p-3.5 bg-gray-50 dark:bg-gray-950/40 rounded-xl border border-gray-100 dark:border-gray-850">
+            <div class="flex items-start space-x-3.5">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs <%= msg.isRead ? 'bg-gray-100 text-gray-500' : 'bg-blue-100 text-blue-600' %>">
+                <%= msg.name.substring(0, 2).toUpperCase() %>
+              </div>
+              <div>
+                <h5 class="text-xs font-bold <%= msg.isRead ? 'text-gray-600 dark:text-gray-450' : 'text-gray-850 dark:text-white' %> flex items-center">
+                  <%= msg.name %>
+                  <% if (!msg.isRead) { %>
+                    <span class="w-1.5 h-1.5 bg-blue-600 rounded-full ml-1.5"></span>
+                  <% } %>
+                </h5>
+                <p class="text-[11px] text-gray-450 dark:text-gray-400 mt-1 line-clamp-1 leading-snug"><%= msg.message %></p>
+                <span class="text-[9px] text-gray-400 block mt-1.5"><%= new Date(msg.createdAt).toLocaleString() %></span>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="text-center py-6">
+          <i class="fas fa-inbox text-2xl text-gray-300 dark:text-gray-700 mb-2 block"></i>
+          <p class="text-xs text-gray-500 font-normal">Inbox is empty. No recent messages received.</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+</div>
+
+<!-- CHART.JS INITIATION SCRIPTS -->
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const res = await fetch('/api/analytics');
+      const data = await res.json();
+
+      if (data.success) {
+        
+        // --- 1. Visitor Trends Chart (Line Chart) ---
+        const ctxTrends = document.getElementById('visitorTrendsChart').getContext('2d');
+        new Chart(ctxTrends, {
+          type: 'line',
+          data: {
+            labels: data.trends.labels,
+            datasets: [{
+              label: 'Visits',
+              data: data.trends.data,
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.05)',
+              borderWidth: 2,
+              tension: 0.35,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { 
+                beginAtZero: true,
+                grid: { color: 'rgba(156, 163, 175, 0.08)' }
+              },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+
+        // --- 2. Messages Analytics Chart (Doughnut Chart) ---
+        const ctxMessages = document.getElementById('messageAnalyticsChart').getContext('2d');
+        new Chart(ctxMessages, {
+          type: 'doughnut',
+          data: {
+            labels: ['Read Messages', 'Unread Messages'],
+            datasets: [{
+              data: [data.messages.read, data.messages.unread],
+              backgroundColor: ['#9ca3af', '#ef4444'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { boxWidth: 12, font: { size: 10 } }
+              }
+            }
+          }
+        });
+
+        // --- 3. Project Views Chart (Bar Chart) ---
+        const ctxProjects = document.getElementById('projectViewsChart').getContext('2d');
+        new Chart(ctxProjects, {
+          type: 'bar',
+          data: {
+            labels: data.projects.labels,
+            datasets: [{
+              label: 'Views count',
+              data: data.projects.data,
+              backgroundColor: '#8b5cf6',
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { 
+                beginAtZero: true,
+                grid: { color: 'rgba(156, 163, 175, 0.08)' }
+              },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+
+        // --- 4. Country Wise Traffic (Horizontal Bar Chart) ---
+        const ctxCountries = document.getElementById('countryTrafficChart').getContext('2d');
+        new Chart(ctxCountries, {
+          type: 'bar',
+          data: {
+            labels: data.countries.labels,
+            datasets: [{
+              label: 'Visits',
+              data: data.countries.data,
+              backgroundColor: '#10b981',
+              borderRadius: 6
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { 
+                beginAtZero: true,
+                grid: { color: 'rgba(156, 163, 175, 0.08)' }
+              },
+              y: { grid: { display: false } }
+            }
+          }
+        });
+
+      }
+    } catch (e) {
+      console.error('Failed to parse analytics chart data:', e);
+    }
+  });
+</script>
+
+<%- include('../partials/admin_footer') %>

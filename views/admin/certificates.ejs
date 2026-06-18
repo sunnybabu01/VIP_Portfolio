@@ -1,0 +1,121 @@
+<%- include('../partials/admin_header') %>
+
+<div class="space-y-8">
+  
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="font-heading font-extrabold text-2xl sm:text-3xl text-gray-900 dark:text-white">Credentials & Certificates</h1>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Manage certifications badges, verification paths, and printable files.</p>
+    </div>
+    
+    <!-- Add Certificate Button -->
+    <button onclick="toggleModal('add-certificate-modal')" class="inline-flex items-center px-4 py-2.5 text-xs font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-md shadow-blue-500/10 transition-all">
+      <i class="fas fa-plus mr-2"></i> Upload Certificate
+    </button>
+  </div>
+
+  <!-- Certificates Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% if (certificates && certificates.length > 0) { %>
+      <% certificates.forEach(cert => { %>
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800/80 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
+          
+          <div class="aspect-video bg-gray-50 dark:bg-gray-950 flex items-center justify-center relative overflow-hidden border-b border-gray-100 dark:border-gray-800">
+            <% if (cert.imageUrl) { %>
+              <img src="<%= cert.imageUrl %>" alt="<%= cert.name %>" class="w-full h-full object-cover">
+            <% } else { %>
+              <i class="fas fa-award text-4xl text-blue-500/30"></i>
+            <% } %>
+          </div>
+
+          <div class="p-5 space-y-4">
+            <div>
+              <h3 class="font-heading font-bold text-sm text-gray-900 dark:text-white leading-tight"><%= cert.name %></h3>
+              <span class="text-[10px] text-gray-400 block mt-1">Date: <%= new Date(cert.date).toLocaleDateString() %></span>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-800/80 pt-4 mt-6">
+              <div class="flex space-x-2 text-[11px] font-semibold text-gray-500">
+                <% if (cert.pdfUrl) { %>
+                  <a href="<%= cert.pdfUrl %>" download class="hover:text-blue-600"><i class="fas fa-file-pdf mr-1 text-red-500"></i> PDF</a>
+                <% } %>
+              </div>
+
+              <div class="flex items-center space-x-1.5">
+                <% if (cert.credentialUrl) { %>
+                  <a href="<%= cert.credentialUrl %>" target="_blank" class="p-2 text-gray-450 hover:text-blue-600" title="Verify Link"><i class="fas fa-external-link-alt text-xs"></i></a>
+                <% } %>
+                <form action="/admin/certificates/<%= cert._id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this certificate?')" class="inline">
+                  <button type="submit" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl"><i class="fas fa-trash-can"></i></button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="col-span-full text-center py-16 bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800/80">
+        <i class="fas fa-award text-4xl text-gray-300 dark:text-gray-700 mb-3 block animate-pulse"></i>
+        <p class="text-sm text-gray-500">No certificates uploaded yet. Click "Upload Certificate" to begin.</p>
+      </div>
+    <% } %>
+  </div>
+
+</div>
+
+<!-- ==========================================
+# MODAL: ADD CERTIFICATE
+========================================== -->
+<div id="add-certificate-modal" class="hidden fixed inset-0 z-50 bg-gray-950/60 p-4 items-center justify-center animate-fade-in">
+  <div class="bg-white dark:bg-gray-900 max-w-md w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col">
+    <div class="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-950/30">
+      <h3 class="font-heading font-extrabold text-sm sm:text-base text-gray-800 dark:text-white">Upload Certificate</h3>
+      <button onclick="toggleModal('add-certificate-modal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+    </div>
+    
+    <form action="/admin/certificates" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 text-xs sm:text-sm">
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Certificate Title / Name</label>
+        <input type="text" name="name" placeholder="e.g. AWS Cloud Practitioner" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-xl" required>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Verification / Credential Link</label>
+        <input type="url" name="credentialUrl" placeholder="https://aws.verification.com/..." class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-855 rounded-xl">
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Issue Date</label>
+        <input type="date" name="date" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-855 rounded-xl" required>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="text-[9px] text-gray-450 font-bold block mb-1">Upload Badge/Image</label>
+          <input type="file" name="imageUrl" accept="image/*" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2" required>
+        </div>
+        <div>
+          <label class="text-[9px] text-gray-450 font-bold block mb-1">Upload Certificate PDF</label>
+          <input type="file" name="pdfUrl" accept="application/pdf" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100 dark:border-gray-850">
+        <button type="button" onclick="toggleModal('add-certificate-modal')" class="px-4 py-2 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-bold text-xs rounded-xl hover:bg-gray-50">Cancel</button>
+        <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md">Upload</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function toggleModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.toggle('hidden');
+    modal.classList.toggle('flex');
+  }
+</script>
+
+<%- include('../partials/admin_footer') %>

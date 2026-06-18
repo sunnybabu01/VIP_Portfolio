@@ -1,0 +1,238 @@
+<%- include('../partials/admin_header') %>
+
+<div class="space-y-8">
+  
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="font-heading font-extrabold text-2xl sm:text-3xl text-gray-900 dark:text-white">Projects Database</h1>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Manage project portfolios, categories, tags, source repositories, and view counts.</p>
+    </div>
+    
+    <!-- Add Project Button -->
+    <button onclick="toggleModal('add-project-modal')" class="inline-flex items-center px-4 py-2.5 text-xs font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-md shadow-blue-500/10 transition-all">
+      <i class="fas fa-plus mr-2"></i> Add Project
+    </button>
+  </div>
+
+  <!-- Projects Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% if (projects && projects.length > 0) { %>
+      <% projects.forEach(project => { %>
+        <!-- Project admin card -->
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800/80 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
+          
+          <!-- Banner -->
+          <div class="aspect-video w-full relative bg-gray-100 dark:bg-gray-950">
+            <% if (project.images && project.images.length > 0) { %>
+              <img src="<%= project.images[0] %>" alt="<%= project.title %>" class="w-full h-full object-cover">
+            <% } else { %>
+              <div class="w-full h-full flex flex-col items-center justify-center text-gray-450 text-[10px] uppercase font-bold tracking-wider"><i class="fas fa-image text-2xl mb-1.5 opacity-30"></i> No Image</div>
+            <% } %>
+
+            <!-- category badge -->
+            <span class="absolute top-3 right-3 text-[9px] font-bold bg-white/95 dark:bg-gray-900/95 px-2.5 py-1 rounded-md text-gray-800 dark:text-white shadow-sm border border-gray-100 dark:border-gray-800"><%= project.category %></span>
+            <% if (project.featured) { %>
+              <span class="absolute top-3 left-3 text-[9px] font-bold bg-yellow-500 text-white px-2.5 py-1 rounded-md shadow-sm"><i class="fas fa-star mr-1"></i> Featured</span>
+            <% } %>
+          </div>
+
+          <!-- Body details -->
+          <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+            <div>
+              <h3 class="font-heading font-bold text-base text-gray-900 dark:text-white leading-tight"><%= project.title %></h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-3 leading-relaxed"><%= project.description %></p>
+              
+              <!-- tags -->
+              <div class="flex flex-wrap gap-1 mt-4">
+                <% project.technologies.forEach(tech => { %>
+                  <span class="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-[10px] font-semibold text-gray-600 dark:text-gray-400 rounded"><%= tech %></span>
+                <% }) %>
+              </div>
+            </div>
+
+            <!-- Footer statistics and options -->
+            <div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-800/80 pt-4 mt-6">
+              <span class="text-[10px] text-gray-400 font-semibold"><i class="far fa-eye mr-1.5"></i> <%= project.views %> Views</span>
+
+              <div class="flex items-center space-x-2">
+                <!-- Edit trigger -->
+                <button onclick="openEditProjectModal('<%= project._id %>', '<%= project.title %>', '<%= project.description.replace(/\'/g, `\\'`).replace(/\"/g, `\\"`).replace(/(?:\r\n|\r|\n)/g, ` `) %>', '<%= project.githubLink %>', '<%= project.liveLink %>', '<%= project.category %>', '<%= project.technologies.join(`,`) %>', '<%= project.featured %>')" class="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 rounded-xl" title="Edit Project"><i class="fas fa-edit"></i></button>
+                <!-- Delete Form -->
+                <form action="/admin/projects/<%= project._id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?')" class="inline">
+                  <button type="submit" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl" title="Delete Project"><i class="fas fa-trash-can"></i></button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="col-span-full text-center py-16 bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800/80">
+        <i class="fas fa-laptop-code text-4xl text-gray-300 dark:text-gray-700 mb-3 block animate-pulse"></i>
+        <p class="text-sm text-gray-500">No projects recorded in CMS database yet. Click "Add Project" to launch.</p>
+      </div>
+    <% } %>
+  </div>
+
+</div>
+
+<!-- ==========================================
+# MODAL 1: ADD NEW PROJECT
+========================================== -->
+<div id="add-project-modal" class="hidden fixed inset-0 z-50 bg-gray-950/60 p-4 items-center justify-center animate-fade-in">
+  <div class="bg-white dark:bg-gray-900 max-w-xl w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div class="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-950/30">
+      <h3 class="font-heading font-extrabold text-sm sm:text-base text-gray-800 dark:text-white">Add New Project</h3>
+      <button onclick="toggleModal('add-project-modal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+    </div>
+    
+    <form action="/admin/projects" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 overflow-y-auto text-xs sm:text-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Project Title</label>
+          <input type="text" name="title" placeholder="e.g. Snapcart" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-xl" required>
+        </div>
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Category Category</label>
+          <select name="category" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-xl" required>
+            <option value="Web Development">Web Development</option>
+            <option value="Mobile Apps">Mobile Apps</option>
+            <option value="AI Projects">AI Projects</option>
+            <option value="Full Stack">Full Stack</option>
+            <option value="Data Science">Data Science</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Project Description</label>
+        <textarea name="description" rows="4" placeholder="Brief details about project purpose and targets..." class="w-full p-3 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-xl" required></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">GitHub repository link</label>
+          <input type="url" name="githubLink" placeholder="https://github.com/..." class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-855 rounded-xl">
+        </div>
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Live demo link</label>
+          <input type="url" name="liveLink" placeholder="https://demo.com" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-855 rounded-xl">
+        </div>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Technologies (Comma separated list)</label>
+        <input type="text" name="technologies" placeholder="e.g. React.js, Express.js, MongoDB" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-xl">
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-gray-150 dark:border-gray-850">
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Upload Project Images</label>
+          <input type="file" name="images" multiple accept="image/*" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2">
+        </div>
+        <div class="flex items-center pl-2 pt-5">
+          <input type="checkbox" name="featured" id="add-featured" value="true" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+          <label for="add-featured" class="ml-2.5 text-xs font-semibold text-gray-700 dark:text-gray-300">Feature this project on Home</label>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100 dark:border-gray-850">
+        <button type="button" onclick="toggleModal('add-project-modal')" class="px-4 py-2 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-bold text-xs rounded-xl hover:bg-gray-50">Cancel</button>
+        <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md">Add Project</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==========================================
+# MODAL 2: EDIT PROJECT
+========================================== -->
+<div id="edit-project-modal" class="hidden fixed inset-0 z-50 bg-gray-950/60 p-4 items-center justify-center animate-fade-in">
+  <div class="bg-white dark:bg-gray-900 max-w-xl w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div class="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-950/30">
+      <h3 class="font-heading font-extrabold text-sm sm:text-base text-gray-800 dark:text-white">Edit Project</h3>
+      <button onclick="toggleModal('edit-project-modal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+    </div>
+    
+    <form id="edit-project-form" action="" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 overflow-y-auto text-xs sm:text-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Project Title</label>
+          <input type="text" name="title" id="edit-title" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-xl" required>
+        </div>
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Category Category</label>
+          <select name="category" id="edit-category" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-xl" required>
+            <option value="Web Development">Web Development</option>
+            <option value="Mobile Apps">Mobile Apps</option>
+            <option value="AI Projects">AI Projects</option>
+            <option value="Full Stack">Full Stack</option>
+            <option value="Data Science">Data Science</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Project Description</label>
+        <textarea name="description" id="edit-desc" rows="4" class="w-full p-3 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-855 rounded-xl" required></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">GitHub repository link</label>
+          <input type="url" name="githubLink" id="edit-github" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-855 rounded-xl">
+        </div>
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Live demo link</label>
+          <input type="url" name="liveLink" id="edit-live" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-855 rounded-xl">
+        </div>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Technologies (Comma separated list)</label>
+        <input type="text" name="technologies" id="edit-techs" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-250 dark:border-gray-850 rounded-xl">
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-gray-150 dark:border-gray-850">
+        <div>
+          <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Append New Images</label>
+          <input type="file" name="images" multiple accept="image/*" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2">
+        </div>
+        <div class="flex items-center pl-2 pt-5">
+          <input type="checkbox" name="featured" id="edit-featured" value="true" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+          <label for="edit-featured" class="ml-2.5 text-xs font-semibold text-gray-700 dark:text-gray-300">Feature this project on Home</label>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100 dark:border-gray-850">
+        <button type="button" onclick="toggleModal('edit-project-modal')" class="px-4 py-2 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-bold text-xs rounded-xl hover:bg-gray-50">Cancel</button>
+        <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function toggleModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.toggle('hidden');
+    modal.classList.toggle('flex');
+  }
+
+  function openEditProjectModal(id, title, desc, github, live, category, techs, featured) {
+    document.getElementById('edit-title').value = title;
+    document.getElementById('edit-category').value = category;
+    document.getElementById('edit-desc').value = desc;
+    document.getElementById('edit-github').value = github;
+    document.getElementById('edit-live').value = live;
+    document.getElementById('edit-techs').value = techs;
+    document.getElementById('edit-featured').checked = (featured === 'true');
+
+    document.getElementById('edit-project-form').setAttribute('action', `/admin/projects/${id}/edit`);
+    toggleModal('edit-project-modal');
+  }
+</script>
+
+<%- include('../partials/admin_footer') %>

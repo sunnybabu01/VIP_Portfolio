@@ -1,0 +1,286 @@
+<%- include('../partials/admin_header') %>
+
+<div class="space-y-8">
+  
+  <!-- Page Header -->
+  <div>
+    <h1 class="font-heading font-extrabold text-2xl sm:text-3xl text-gray-900 dark:text-white">Profile & Settings</h1>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Manage biography narrative, hero header variables, social connections, and education details.</p>
+  </div>
+
+  <!-- Success/Error Toast messages -->
+  <% 
+    const urlParams = typeof req !== 'undefined' ? req.query : {}; 
+  %>
+  <div id="status-toast" class="hidden text-xs px-4 py-3.5 rounded-xl border border-green-200 bg-green-50 text-green-600 dark:bg-green-950/20 dark:border-green-900/50 dark:text-green-400 mb-6"></div>
+
+  <!-- GRID CONTENT LAYOUT -->
+  <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+    
+    <!-- Left forms column -->
+    <div class="xl:col-span-8 space-y-8">
+      
+      <!-- FORM 1: BASIC PROFILE & IMAGES -->
+      <section class="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-200 dark:border-gray-800/80 shadow-sm space-y-6">
+        <h3 class="font-heading font-bold text-base text-gray-800 dark:text-white border-b border-gray-100 dark:border-gray-850 pb-3"><i class="fas fa-id-card text-blue-500 mr-2.5"></i>Basic Biography details</h3>
+        
+        <form action="/admin/profile" method="POST" enctype="multipart/form-data" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Full Name</label>
+              <input type="text" name="name" value="<%= profile.name %>" class="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500">
+            </div>
+            
+            <div>
+              <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Designation</label>
+              <input type="text" name="designation" value="<%= profile.designation %>" class="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500">
+            </div>
+            
+            <div>
+              <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Email Address</label>
+              <input type="email" name="email" value="<%= profile.email %>" class="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500">
+            </div>
+
+            <div>
+              <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Phone Number</label>
+              <input type="text" name="phone" value="<%= profile.phone %>" class="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Address Location</label>
+            <input type="text" name="address" value="<%= profile.address %>" class="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+
+          <!-- Files Uploads -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-y border-gray-50 dark:border-gray-850 py-4">
+            <div>
+              <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Upload Profile Avatar image</label>
+              <input type="file" name="profileImage" accept="image/*" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2 focus:outline-none file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-950/40 dark:file:text-blue-300">
+              <% if (profile.profileImage) { %>
+                <span class="text-[9px] text-green-500 mt-1 block">Current Avatar: <a href="<%= profile.profileImage %>" target="_blank" class="underline"><%= profile.profileImage.substring(0, 30) %>...</a></span>
+              <% } %>
+            </div>
+
+            <div>
+              <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Upload Resume PDF</label>
+              <input type="file" name="resumePdf" accept="application/pdf" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2 focus:outline-none file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-950/40 dark:file:text-blue-300">
+              <% if (profile.resumePdf) { %>
+                <span class="text-[9px] text-green-500 mt-1 block">Current Resume: <a href="<%= profile.resumePdf %>" target="_blank" class="underline"><%= profile.resumePdf.substring(0, 30) %>...</a></span>
+              <% } %>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Biography description (About Text)</label>
+            <textarea name="aboutText" rows="4" class="w-full text-xs p-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500"><%= profile.aboutText %></textarea>
+          </div>
+
+          <div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Career Objective</label>
+            <textarea name="careerObjective" rows="3" class="w-full text-xs p-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500"><%= profile.careerObjective %></textarea>
+          </div>
+
+          <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-750 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+            Save Biography Changes
+          </button>
+        </form>
+      </section>
+
+      <!-- FORM 2: EDUCATION TIMELINE LIST -->
+      <section class="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-200 dark:border-gray-800/80 shadow-sm space-y-6">
+        <h3 class="font-heading font-bold text-base text-gray-800 dark:text-white border-b border-gray-100 dark:border-gray-850 pb-3"><i class="fas fa-graduation-cap text-purple-500 mr-2.5"></i>Academic details (Education Timeline)</h3>
+        
+        <form action="/admin/profile/education" method="POST" class="space-y-4">
+          <div id="education-rows" class="space-y-4">
+            <% if (profile.education && profile.education.length > 0) { %>
+              <% profile.education.forEach((edu, idx) => { %>
+                <div class="education-row grid grid-cols-1 sm:grid-cols-12 gap-3 p-4 bg-gray-50 dark:bg-gray-950/40 rounded-2xl border border-gray-100 dark:border-gray-850 relative">
+                  <div class="sm:col-span-4">
+                    <label class="text-[9px] text-gray-400 font-bold block mb-1">Degree Title</label>
+                    <input type="text" name="degree" value="<%= edu.degree %>" class="w-full text-xs p-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl" required>
+                  </div>
+                  <div class="sm:col-span-4">
+                    <label class="text-[9px] text-gray-400 font-bold block mb-1">College/Institution</label>
+                    <input type="text" name="college" value="<%= edu.college %>" class="w-full text-xs p-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl" required>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="text-[9px] text-gray-400 font-bold block mb-1">Duration</label>
+                    <input type="text" name="duration" value="<%= edu.duration %>" placeholder="2023 - 2027" class="w-full text-xs p-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl" required>
+                  </div>
+                  <div class="sm:col-span-2 flex items-end space-x-2">
+                    <div class="flex-grow">
+                      <label class="text-[9px] text-gray-400 font-bold block mb-1">Score</label>
+                      <input type="text" name="score" value="<%= edu.score %>" placeholder="CGPA: 8.5" class="w-full text-xs p-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl">
+                    </div>
+                    <button type="button" onclick="this.closest('.education-row').remove()" class="p-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl border border-transparent"><i class="fas fa-trash"></i></button>
+                  </div>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-gray-50 dark:border-gray-850 pt-4 mt-6">
+            <button type="button" onclick="addEducationRow()" class="px-4 py-2 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 font-bold text-xs rounded-xl flex items-center">
+              <i class="fas fa-plus mr-2"></i> Add Education Row
+            </button>
+
+            <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-750 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+              Save Academic Changes
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+
+    <!-- Right configurations columns -->
+    <div class="xl:col-span-4 space-y-8">
+      
+      <!-- HERO CONTROLS -->
+      <section class="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-200 dark:border-gray-800/80 shadow-sm space-y-6">
+        <h3 class="font-heading font-bold text-base text-gray-800 dark:text-white border-b border-gray-100 dark:border-gray-850 pb-3"><i class="fas fa-sliders-h text-yellow-500 mr-2.5"></i>Hero section Settings</h3>
+        
+        <form action="/admin/profile/hero" method="POST" enctype="multipart/form-data" class="space-y-4">
+          <div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Hero Title</label>
+            <input type="text" name="heroTitle" value="<%= profile.heroTitle %>" class="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+
+          <div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Hero Subtitle</label>
+            <input type="text" name="heroSubtitle" value="<%= profile.heroSubtitle %>" class="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500">
+          </div>
+
+          <div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Hero Description</label>
+            <textarea name="heroDescription" rows="3" class="w-full text-xs p-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500"><%= profile.heroDescription %></textarea>
+          </div>
+
+          <div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Hero Image Background</label>
+            <input type="file" name="heroImage" accept="image/*" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2 focus:outline-none">
+            <% if (profile.heroImage) { %>
+              <span class="text-[9px] text-green-500 mt-1 block">Current Hero image: <a href="<%= profile.heroImage %>" target="_blank" class="underline"><%= profile.heroImage.substring(0, 30) %>...</a></span>
+            <% } %>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-[9px] text-gray-400 font-bold block mb-1">Resume Button text</label>
+              <input type="text" name="resumeButtonText" value="<%= profile.resumeButtonText %>" class="w-full text-xs px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+            <div>
+              <label class="text-[9px] text-gray-400 font-bold block mb-1">CTA Button text</label>
+              <input type="text" name="ctaButtonText" value="<%= profile.ctaButtonText %>" class="w-full text-xs px-3 py-2 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">CTA Redirect Link (e.g. #contact)</label>
+            <input type="text" name="ctaButtonLink" value="<%= profile.ctaButtonLink %>" class="w-full text-xs px-3.5 py-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+          </div>
+
+          <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-750 text-white font-bold text-xs rounded-xl shadow-md transition-colors">
+            Update Hero Section
+          </button>
+        </form>
+      </section>
+
+      <!-- SOCIAL CONNECTIONS -->
+      <section class="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-200 dark:border-gray-800/80 shadow-sm space-y-6">
+        <h3 class="font-heading font-bold text-base text-gray-800 dark:text-white border-b border-gray-100 dark:border-gray-850 pb-3"><i class="fas fa-share-nodes text-green-500 mr-2.5"></i>Social Connections</h3>
+        
+        <form action="/admin/profile/socials" method="POST" class="space-y-4">
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="text-gray-400 block mb-1 font-semibold">GitHub</label>
+              <input type="url" name="github" value="<%= profile.socialLinks?.github || '' %>" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+            <div>
+              <label class="text-gray-400 block mb-1 font-semibold">LinkedIn</label>
+              <input type="url" name="linkedin" value="<%= profile.socialLinks?.linkedin || '' %>" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+            <div>
+              <label class="text-gray-400 block mb-1 font-semibold">LeetCode</label>
+              <input type="url" name="leetcode" value="<%= profile.socialLinks?.leetcode || '' %>" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+            <div>
+              <label class="text-gray-400 block mb-1 font-semibold">HackerRank</label>
+              <input type="url" name="hackerrank" value="<%= profile.socialLinks?.hackerrank || '' %>" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+            <div>
+              <label class="text-gray-400 block mb-1 font-semibold">CodeChef</label>
+              <input type="url" name="codechef" value="<%= profile.socialLinks?.codechef || '' %>" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+            <div>
+              <label class="text-gray-400 block mb-1 font-semibold">Twitter / X</label>
+              <input type="url" name="twitter" value="<%= profile.socialLinks?.twitter || '' %>" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+            <div>
+              <label class="text-gray-400 block mb-1 font-semibold">Instagram</label>
+              <input type="url" name="instagram" value="<%= profile.socialLinks?.instagram || '' %>" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl">
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-750 text-white font-bold text-xs rounded-xl shadow-md transition-colors">
+            Update Social Accounts
+          </button>
+        </form>
+      </section>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- CLIENT JAVASCRIPT FOR DYNAMIC DOM MANAGEMENT -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Read status parameters from URL
+    const params = new URLSearchParams(window.location.search);
+    const toast = document.getElementById('status-toast');
+    
+    if (params.has('success')) {
+      toast.className = 'text-xs px-4 py-3.5 rounded-xl border border-green-200 bg-green-50 text-green-600 dark:bg-green-950/20 dark:border-green-900/50 dark:text-green-400 mb-6 block animate-fade-in';
+      toast.textContent = params.get('success');
+      setTimeout(() => { toast.classList.add('hidden'); }, 4000);
+    } else if (params.has('error')) {
+      toast.className = 'text-xs px-4 py-3.5 rounded-xl border border-red-200 bg-red-50 text-red-650 dark:bg-red-950/20 dark:border-red-900/50 dark:text-red-400 mb-6 block animate-fade-in';
+      toast.textContent = params.get('error');
+      setTimeout(() => { toast.classList.add('hidden'); }, 5000);
+    }
+  });
+
+  // Client row appender for education list
+  function addEducationRow() {
+    const parent = document.getElementById('education-rows');
+    const row = document.createElement('div');
+    row.className = 'education-row grid grid-cols-1 sm:grid-cols-12 gap-3 p-4 bg-gray-50 dark:bg-gray-950/40 rounded-2xl border border-gray-100 dark:border-gray-850 relative animate-fade-in';
+    row.innerHTML = `
+      <div class="sm:col-span-4">
+        <label class="text-[9px] text-gray-400 font-bold block mb-1">Degree Title</label>
+        <input type="text" name="degree" class="w-full text-xs p-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl" required>
+      </div>
+      <div class="sm:col-span-4">
+        <label class="text-[9px] text-gray-400 font-bold block mb-1">College/Institution</label>
+        <input type="text" name="college" class="w-full text-xs p-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl" required>
+      </div>
+      <div class="sm:col-span-2">
+        <label class="text-[9px] text-gray-400 font-bold block mb-1">Duration</label>
+        <input type="text" name="duration" placeholder="2023 - 2027" class="w-full text-xs p-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl" required>
+      </div>
+      <div class="sm:col-span-2 flex items-end space-x-2">
+        <div class="flex-grow">
+          <label class="text-[9px] text-gray-400 font-bold block mb-1">Score</label>
+          <input type="text" name="score" placeholder="CGPA: 8.5" class="w-full text-xs p-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl">
+        </div>
+        <button type="button" onclick="this.closest('.education-row').remove()" class="p-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl border border-transparent"><i class="fas fa-trash"></i></button>
+      </div>
+    `;
+    parent.appendChild(row);
+  }
+</script>
+
+<%- include('../partials/admin_footer') %>

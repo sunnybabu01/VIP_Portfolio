@@ -1,0 +1,162 @@
+<%- include('../partials/admin_header') %>
+
+<div class="space-y-8 animate-fade-in">
+  
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="font-heading font-extrabold text-2xl sm:text-3xl text-gray-900 dark:text-white">Gallery Database</h1>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload, edit details, and remove photo items from the public gallery.</p>
+    </div>
+    
+    <!-- Add Photo Button -->
+    <button onclick="toggleModal('add-photo-modal')" class="inline-flex items-center px-4 py-2.5 text-xs font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-md shadow-blue-500/10 transition-all active:scale-95">
+      <i class="fas fa-plus mr-2"></i> Upload Photo
+    </button>
+  </div>
+
+  <!-- Photo list cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% if (galleryItems && galleryItems.length > 0) { %>
+      <% galleryItems.forEach((item, index) => { %>
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow relative flex flex-col justify-between">
+          
+          <div class="space-y-4">
+            <!-- Photo Preview -->
+            <div class="aspect-video w-full rounded-xl overflow-hidden bg-slate-100 dark:bg-gray-950 border border-gray-150 dark:border-gray-800/80 flex items-center justify-center">
+              <img src="<%= item.imageUrl %>" alt="<%= item.title %>" class="w-full h-full object-cover">
+            </div>
+            
+            <div>
+              <h3 class="font-heading font-bold text-sm text-gray-800 dark:text-white leading-snug line-clamp-1"><%= item.title %></h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 line-clamp-2 leading-relaxed font-normal"><%= item.description || 'No description provided.' %></p>
+              <span class="text-[10px] text-gray-400 block font-medium mt-3">Uploaded: <%= new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+            </div>
+          </div>
+
+          <!-- Actions Footer -->
+          <div class="flex items-center justify-between border-t border-gray-100 dark:border-gray-800/50 pt-4 mt-6">
+            <!-- Edit Trigger Button -->
+            <button onclick="openEditModal('<%= item._id %>', '<%= item.title %>', '<%= item.description %>')" class="px-3.5 py-2 border border-gray-200 dark:border-gray-850 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold text-xs rounded-xl transition-colors flex items-center">
+              <i class="fas fa-edit mr-2 text-[10px]"></i> Edit Details
+            </button>
+
+            <!-- Delete Form -->
+            <form action="/admin/gallery/<%= item._id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this photo?')" class="inline">
+              <button type="submit" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl" title="Delete Photo">
+                <i class="fas fa-trash-can text-sm"></i>
+              </button>
+            </form>
+          </div>
+
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="col-span-full text-center py-20 bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800/80 w-full max-w-2xl mx-auto">
+        <i class="fas fa-images text-4xl text-gray-300 dark:text-gray-700 mb-3 block animate-pulse"></i>
+        <p class="text-sm text-gray-500">No photos registered in the gallery. Click "Upload Photo" to begin.</p>
+      </div>
+    <% } %>
+  </div>
+
+</div>
+
+<!-- ==========================================
+# MODAL: ADD GALLERY PHOTO
+========================================== -->
+<div id="add-photo-modal" class="hidden fixed inset-0 z-50 bg-gray-950/60 p-4 items-center justify-center animate-fade-in" onclick="closeModalOnBackdrop(event, 'add-photo-modal')">
+  <div class="bg-white dark:bg-gray-900 max-w-md w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col" onclick="event.stopPropagation()">
+    
+    <div class="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-950/30">
+      <h3 class="font-heading font-extrabold text-sm sm:text-base text-gray-800 dark:text-white">Upload New Photo</h3>
+      <button onclick="toggleModal('add-photo-modal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+    </div>
+    
+    <form action="/admin/gallery" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 text-xs sm:text-sm">
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Photo Title</label>
+        <input type="text" name="title" placeholder="e.g. SIH Presentation" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl" required>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Description</label>
+        <textarea name="description" rows="3" placeholder="Brief details about what is in this photo..." class="w-full p-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl"></textarea>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Upload File</label>
+        <input type="file" name="image" accept="image/*" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2.5" required>
+        <p class="text-[10px] text-gray-400 mt-1">Recommended file size: < 5MB (JPG, JPEG, PNG, WEBP, GIF)</p>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100 dark:border-gray-800/80">
+        <button type="button" onclick="toggleModal('add-photo-modal')" class="px-4 py-2 border border-gray-200 dark:border-gray-850 text-gray-700 dark:text-gray-300 font-bold text-xs rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
+        <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md">Upload Photo</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==========================================
+# MODAL: EDIT GALLERY PHOTO
+========================================== -->
+<div id="edit-photo-modal" class="hidden fixed inset-0 z-50 bg-gray-950/60 p-4 items-center justify-center animate-fade-in" onclick="closeModalOnBackdrop(event, 'edit-photo-modal')">
+  <div class="bg-white dark:bg-gray-900 max-w-md w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden flex flex-col" onclick="event.stopPropagation()">
+    
+    <div class="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-950/30">
+      <h3 class="font-heading font-extrabold text-sm sm:text-base text-gray-800 dark:text-white">Edit Photo Details</h3>
+      <button onclick="toggleModal('edit-photo-modal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-lg"></i></button>
+    </div>
+    
+    <form id="edit-photo-form" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 text-xs sm:text-sm">
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Photo Title</label>
+        <input type="text" id="edit-photo-title" name="title" class="w-full p-2.5 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl" required>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Description</label>
+        <textarea id="edit-photo-description" name="description" rows="3" class="w-full p-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl"></textarea>
+      </div>
+
+      <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Replace File (Optional)</label>
+        <input type="file" name="image" accept="image/*" class="w-full text-xs border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-xl p-2.5">
+        <p class="text-[10px] text-gray-400 mt-1">Leave empty to keep the existing image.</p>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100 dark:border-gray-800/80">
+        <button type="button" onclick="toggleModal('edit-photo-modal')" class="px-4 py-2 border border-gray-200 dark:border-gray-855 text-gray-700 dark:text-gray-300 font-bold text-xs rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
+        <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function toggleModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.toggle('hidden');
+      modal.classList.toggle('flex');
+    }
+  }
+
+  function closeModalOnBackdrop(event, id) {
+    toggleModal(id);
+  }
+
+  function openEditModal(id, title, description) {
+    // Populate form values
+    document.getElementById('edit-photo-title').value = title;
+    document.getElementById('edit-photo-description').value = description;
+    
+    // Set dynamic form action URL
+    const form = document.getElementById('edit-photo-form');
+    form.action = `/admin/gallery/${id}/edit`;
+    
+    toggleModal('edit-photo-modal');
+  }
+</script>
+
+<%- include('../partials/admin_footer') %>

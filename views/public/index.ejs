@@ -1,0 +1,907 @@
+<%- include('../partials/header') %>
+
+<!-- HERO SECTION -->
+<section id="hero" class="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+  <!-- Interactive mesh gradient background -->
+  <div class="absolute inset-0 mesh-gradient opacity-100 transition-colors duration-300"></div>
+  
+  <!-- Glowing neon circle elements -->
+  <div class="absolute top-1/4 left-1/10 w-96 h-96 rounded-full bg-blue-500/10 dark:bg-blue-500/5 glow-circle"></div>
+  <div class="absolute bottom-1/4 right-1/10 w-96 h-96 rounded-full bg-purple-500/10 dark:bg-purple-500/5 glow-circle"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Left Hero Text details -->
+      <div class="lg:col-span-7 text-center lg:text-left space-y-6 sm:space-y-8 animate-fade-in-up">
+        
+        <!-- Welcome badge -->
+        <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-blue-100/80 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200/50 dark:border-blue-700/30 shadow-sm">
+          <span class="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full mr-2 animate-pulse"></span>
+          <%= profile.designation || 'Software Developer' %>
+        </span>
+
+        <!-- Hero Heading -->
+        <div class="space-y-3">
+          <h1 class="font-heading font-extrabold text-4xl sm:text-6xl text-slate-900 dark:text-white leading-none tracking-tight">
+            <%= profile.heroTitle || 'Hi, I am Sunny Ranjan' %>
+          </h1>
+          <h2 class="font-heading font-extrabold text-2xl sm:text-4xl text-blue-600 dark:text-blue-400 leading-none">
+            I am a <span id="typing-text" class="typing-cursor text-purple-600 dark:text-purple-400" data-words="Software Developer, Full-Stack Developer, AI/ML Enthusiast"></span>
+          </h2>
+        </div>
+
+        <!-- Description -->
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+          <%= profile.heroDescription || 'B.Tech CSIT Student at SIRT Bhopal. Developing robust full-stack software architectures and exploring AI applications.' %>
+        </p>
+
+        <!-- CTA Buttons & Resume Download link -->
+        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+          <a href="<%= profile.ctaButtonLink || '#contact' %>" class="w-full sm:w-auto text-center px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-xl shadow-blue-500/25 active:scale-95 transition-all duration-200">
+            <%= profile.ctaButtonText || 'Hire Sunny' %>
+          </a>
+          <a href="<%= profile.resumePdf || '#' %>" download class="w-full sm:w-auto text-center px-8 py-3.5 rounded-full bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 font-bold text-sm shadow-md active:scale-95 transition-all duration-200 flex items-center justify-center">
+            <i class="fas fa-file-arrow-down mr-2.5"></i>
+            <%= profile.resumeButtonText || 'Download Resume' %>
+          </a>
+        </div>
+
+        <!-- Social networks quick integration -->
+        <div class="flex items-center justify-center lg:justify-start space-x-5 pt-6 text-slate-400 dark:text-slate-500">
+          <% if (profile.socialLinks) { %>
+            <% if (profile.socialLinks.github) { %>
+              <a href="<%= profile.socialLinks.github %>" target="_blank" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"><i class="fab fa-github text-xl"></i></a>
+            <% } %>
+            <% if (profile.socialLinks.linkedin) { %>
+              <a href="<%= profile.socialLinks.linkedin %>" target="_blank" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"><i class="fab fa-linkedin text-xl"></i></a>
+            <% } %>
+            <% if (profile.socialLinks.leetcode) { %>
+              <a href="<%= profile.socialLinks.leetcode %>" target="_blank" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"><i class="fas fa-code text-xl"></i></a>
+            <% } %>
+            <% if (profile.socialLinks.twitter) { %>
+              <a href="<%= profile.socialLinks.twitter %>" target="_blank" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+            <% } %>
+            <% if (profile.socialLinks.instagram) { %>
+              <a href="<%= profile.socialLinks.instagram %>" target="_blank" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+            <% } %>
+          <% } %>
+        </div>
+
+      </div>
+
+      <!-- Right Profile Avatar Container -->
+      <div class="lg:col-span-5 flex justify-center lg:justify-end">
+        <div class="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 animate-float">
+          <!-- Back glowing ring -->
+          <div class="absolute inset-0 rounded-3xl bg-gradient-to-tr from-blue-500 to-purple-500 opacity-20 blur-xl scale-95"></div>
+          
+          <!-- Glass frame -->
+          <div class="absolute inset-0 rounded-3xl border-2 border-slate-200/40 dark:border-slate-800/40 scale-100"></div>
+
+          <!-- Image component -->
+          <div class="w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50">
+            <% if (profile.profileImage) { %>
+              <img src="<%= profile.profileImage %>" alt="Sunny Ranjan" class="w-full h-full object-cover">
+            <% } else { %>
+              <!-- Elegant SVG Profile placeholder if empty -->
+              <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-tr from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-800">
+                <i class="fas fa-user-circle text-8xl text-blue-500/20 dark:text-blue-400/20"></i>
+                <span class="text-xs font-semibold text-slate-400 mt-2 font-heading tracking-widest uppercase">Sunny Ranjan</span>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT ME SECTION -->
+<section id="about" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Biography</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">About Me</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      
+      <!-- Bio narrative -->
+      <div class="lg:col-span-6 space-y-6 reveal">
+        <h3 class="font-heading font-bold text-2xl text-slate-800 dark:text-white">Developing Solutions and Scaling Code</h3>
+        <p class="text-slate-600 dark:text-slate-400 leading-relaxed font-normal text-sm sm:text-base">
+          <%= profile.aboutText || 'I am Sunny Ranjan, currently pursuing my B.Tech in CSIT (2023-2027) at Sagar Institute of Research and Technology (SIRT) Bhopal. I specialize in the full-stack Java/Javascript ecosystems, cloud integrations with AWS, and AI solutions.' %>
+        </p>
+        
+        <!-- Objective box -->
+        <div class="p-6 bg-slate-50 dark:bg-slate-950/40 border-l-4 border-blue-500 rounded-r-2xl">
+          <h4 class="font-heading font-bold text-sm text-slate-800 dark:text-white uppercase tracking-wider">Career Objective</h4>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 font-normal leading-relaxed">
+            <%= profile.careerObjective || 'To leverage my coding skills, full-stack technologies knowledge, and AI expertise in a challenging software development role to create high-impact products and grow as a software engineer.' %>
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 sm:gap-6 pt-4 text-xs sm:text-sm">
+          <div>
+            <span class="text-slate-400 block">Name</span>
+            <strong class="text-slate-800 dark:text-white mt-1 block"><%= profile.name %></strong>
+          </div>
+          <div>
+            <span class="text-slate-400 block">Email Address</span>
+            <strong class="text-slate-800 dark:text-white mt-1 block"><%= profile.email %></strong>
+          </div>
+          <div>
+            <span class="text-slate-400 block">Current College</span>
+            <strong class="text-slate-800 dark:text-white mt-1 block">SIRT, Bhopal</strong>
+          </div>
+          <div>
+            <span class="text-slate-400 block">Current Degree</span>
+            <strong class="text-slate-800 dark:text-white mt-1 block">B.Tech CSIT</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education Timeline -->
+      <div class="lg:col-span-6 space-y-6 reveal">
+        <h3 class="font-heading font-bold text-2xl text-slate-800 dark:text-white">Education Timeline</h3>
+        
+        <div class="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800 space-y-8">
+          <% if (profile.education && profile.education.length > 0) { %>
+            <% profile.education.forEach(edu => { %>
+              <div class="relative">
+                <!-- Timeline bullet point -->
+                <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-blue-600 border-4 border-white dark:border-slate-900 shadow-md"></div>
+                <span class="text-xs font-semibold text-blue-600 dark:text-blue-400"><%= edu.duration %></span>
+                <h4 class="font-heading font-bold text-base text-slate-800 dark:text-white mt-1"><%= edu.degree %></h4>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1"><%= edu.college %></p>
+                <% if (edu.score) { %>
+                  <span class="inline-block px-2.5 py-0.5 mt-2 bg-slate-100 dark:bg-slate-800 rounded-md text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <%= edu.score %>
+                  </span>
+                <% } %>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p class="text-sm text-slate-500 font-normal">Education timeline details not available.</p>
+          <% } %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS SECTION -->
+<section id="skills" class="py-24 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Expertise</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">My Technical Skills</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <!-- Category selectors (Filters) -->
+    <div class="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-12 reveal">
+      <button class="filter-btn active text-xs sm:text-sm font-semibold px-5 py-2 rounded-full shadow-sm bg-blue-600 text-white transition-all duration-200" data-category="All">All Categories</button>
+      <button class="filter-btn text-xs sm:text-sm font-semibold px-5 py-2 rounded-full shadow-sm bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 transition-all duration-200" data-category="Languages">Languages</button>
+      <button class="filter-btn text-xs sm:text-sm font-semibold px-5 py-2 rounded-full shadow-sm bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 transition-all duration-200" data-category="Frontend">Frontend</button>
+      <button class="filter-btn text-xs sm:text-sm font-semibold px-5 py-2 rounded-full shadow-sm bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 transition-all duration-200" data-category="Backend">Backend</button>
+      <button class="filter-btn text-xs sm:text-sm font-semibold px-5 py-2 rounded-full shadow-sm bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 transition-all duration-200" data-category="Database">Database</button>
+      <button class="filter-btn text-xs sm:text-sm font-semibold px-5 py-2 rounded-full shadow-sm bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 transition-all duration-200" data-category="Cloud">Cloud</button>
+      <button class="filter-btn text-xs sm:text-sm font-semibold px-5 py-2 rounded-full shadow-sm bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 transition-all duration-200" data-category="AI/ML">AI/ML</button>
+      <button class="filter-btn text-xs sm:text-sm font-semibold px-5 py-2 rounded-full shadow-sm bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 transition-all duration-200" data-category="Tools">Tools</button>
+    </div>
+
+    <!-- Skills List Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 reveal">
+      <% if (skills && skills.length > 0) { %>
+        <% skills.forEach(skill => { %>
+          <!-- Skill Card -->
+          <div class="project-card bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm hover:shadow-md border border-slate-100 dark:border-slate-800/80 transition-all duration-200" data-category="<%= skill.category %>">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+                  <i class="<%= skill.icon || 'fas fa-code' %> text-lg"></i>
+                </div>
+                <div>
+                  <h4 class="font-heading font-bold text-sm text-slate-800 dark:text-white leading-none"><%= skill.name %></h4>
+                  <span class="text-[10px] text-slate-400 mt-1 block uppercase tracking-wider font-semibold"><%= skill.category %></span>
+                </div>
+              </div>
+              <span class="text-xs font-bold text-blue-600 dark:text-blue-400 font-heading"><%= skill.level %>%</span>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="w-full bg-slate-100 dark:bg-slate-950 rounded-full h-2 overflow-hidden">
+              <div class="bg-blue-600 h-2 rounded-full transition-all duration-1000" style="width: <%= skill.level %>%"></div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="col-span-full text-center text-slate-500 font-normal">No skills records added yet.</p>
+      <% } %>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS SECTION -->
+<section id="projects" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Innovations</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">Featured Projects</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <!-- Client-side Search and Filter fields -->
+    <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-10 reveal">
+      <div class="relative w-full md:max-w-md">
+        <i class="fas fa-search absolute left-4 top-3.5 text-slate-400"></i>
+        <input type="text" id="project-search" placeholder="Search projects by name, tags, description..." class="w-full text-sm pl-11 pr-4 py-3 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      
+      <div class="flex items-center space-x-2 text-xs text-slate-500">
+        <i class="fas fa-info-circle"></i>
+        <span>Instantly filtered using client-side searching</span>
+      </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">
+      <% if (projects && projects.length > 0) { %>
+        <% projects.forEach((project, index) => { %>
+          <!-- Project Card -->
+          <div class="project-card bg-slate-50 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full" data-category="<%= project.category %>" data-techs="<%= project.technologies.join(',') %>">
+            
+            <!-- Project Image Banner -->
+            <div class="relative aspect-video w-full overflow-hidden bg-slate-200 dark:bg-slate-900 flex-shrink-0">
+              <% if (project.images && project.images.length > 0) { %>
+                <img src="<%= project.images[0] %>" alt="<%= project.title %>" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+              <% } else { %>
+                <!-- placeholder graphics -->
+                <div class="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                  <i class="fas fa-image text-3xl opacity-30"></i>
+                  <span class="text-[10px] mt-1 uppercase font-semibold tracking-wider opacity-50">Image Placeholder</span>
+                </div>
+              <% } %>
+              
+              <!-- Category floating badge -->
+              <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[10px] font-bold bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-white shadow-sm">
+                <%= project.category %>
+              </span>
+            </div>
+
+            <!-- Project Details body -->
+            <div class="p-6 flex-grow flex flex-col justify-between">
+              <div>
+                <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white project-title leading-tight"><%= project.title %></h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 line-clamp-3 project-desc font-normal leading-relaxed">
+                  <%= project.description %>
+                </p>
+                
+                <!-- Technology badges list -->
+                <div class="flex flex-wrap gap-1.5 mt-4">
+                  <% project.technologies.forEach(tech => { %>
+                    <span class="px-2 py-0.5 bg-blue-50 dark:bg-blue-950/40 text-[10px] font-bold text-blue-600 dark:text-blue-400 rounded-md">
+                      <%= tech %>
+                    </span>
+                  <% }) %>
+                </div>
+              </div>
+
+              <!-- Footer Actions links -->
+              <div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80 pt-4 mt-6">
+                <!-- View analytics tracker -->
+                <span class="text-[11px] text-slate-400 flex items-center font-medium">
+                  <i class="far fa-eye mr-1.5"></i>
+                  <%= project.views %> views
+                </span>
+
+                <div class="flex space-x-3.5">
+                  <% if (project.githubLink) { %>
+                    <a href="<%= project.githubLink %>" target="_blank" class="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm" title="Source Code"><i class="fab fa-github"></i></a>
+                  <% } %>
+                  <!-- Modal viewer trigger -->
+                  <a href="#" data-modal-target="project-modal-<%= index %>" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-bold flex items-center transition-colors">
+                    Details
+                    <i class="fas fa-chevron-right ml-1 text-[9px]"></i>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Project Detail Modal Popup -->
+          <div id="project-modal-<%= index %>" class="modal-container hidden fixed inset-0 z-50 bg-slate-950/60 p-4 sm:p-6 items-center justify-center animate-fade-in">
+            <div class="bg-white dark:bg-slate-900 max-w-2xl w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-slate-200 dark:border-slate-800">
+              
+              <!-- Modal header -->
+              <div class="p-5 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between bg-slate-50 dark:bg-slate-950/30">
+                <h3 class="font-heading font-extrabold text-base sm:text-lg text-slate-900 dark:text-white"><%= project.title %></h3>
+                <button data-modal-close class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg"><i class="fas fa-times text-lg"></i></button>
+              </div>
+
+              <!-- Modal body (scrollable) -->
+              <div class="p-6 overflow-y-auto space-y-6 scrollbar-thin">
+                <% if (project.images && project.images.length > 0) { %>
+                  <div class="rounded-xl overflow-hidden aspect-video bg-slate-100 dark:bg-slate-950">
+                    <img src="<%= project.images[0] %>" alt="<%= project.title %>" class="w-full h-full object-cover">
+                  </div>
+                <% } %>
+                
+                <div>
+                  <h4 class="font-heading font-bold text-xs uppercase tracking-wider text-slate-400">Project Overview</h4>
+                  <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal mt-1"><%= project.description %></p>
+                </div>
+
+                <div>
+                  <h4 class="font-heading font-bold text-xs uppercase tracking-wider text-slate-400">Technologies Integrated</h4>
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <% project.technologies.forEach(tech => { %>
+                      <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 rounded-lg"><%= tech %></span>
+                    <% }) %>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <span class="text-slate-400">Category</span>
+                    <strong class="text-slate-800 dark:text-white block mt-0.5"><%= project.category %></strong>
+                  </div>
+                  <div>
+                    <span class="text-slate-400">Total Views</span>
+                    <strong class="text-slate-800 dark:text-white block mt-0.5"><%= project.views %> views</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Modal footer action bar -->
+              <div class="p-5 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/30 flex items-center justify-end space-x-3">
+                <% if (project.githubLink) { %>
+                  <a href="<%= project.githubLink %>" target="_blank" class="px-4 py-2 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center">
+                    <i class="fab fa-github mr-2"></i> GitHub Repo
+                  </a>
+                <% } %>
+                <% if (project.liveLink) { %>
+                  <a href="<%= project.liveLink %>" target="_blank" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors flex items-center">
+                    <i class="fas fa-external-link-alt mr-2 text-[10px]"></i> Live Demo
+                  </a>
+                <% } %>
+              </div>
+
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="col-span-full text-center text-slate-500 font-normal">Projects list database is empty.</p>
+      <% } %>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE TIMELINE SECTION -->
+<section id="experience" class="py-24 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Timeline</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">Professional Experience</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <!-- Timeline Wrapper -->
+    <div class="max-w-3xl mx-auto relative pl-8 border-l-2 border-slate-200 dark:border-slate-800 reveal">
+      
+      <% if (experiences && experiences.length > 0) { %>
+        <% experiences.forEach(exp => { %>
+          <!-- Timeline Card -->
+          <div class="relative mb-12 last:mb-0">
+            <!-- Node bullet -->
+            <div class="absolute -left-[41px] top-1.5 w-6 h-6 rounded-full bg-blue-600 border-4 border-white dark:border-slate-950 flex items-center justify-center text-white text-[10px] shadow-md">
+              <i class="fas fa-briefcase"></i>
+            </div>
+            
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800/80 hover:shadow-md transition-shadow">
+              <span class="text-[11px] font-bold text-blue-600 dark:text-blue-400 tracking-wider uppercase"><%= exp.duration %></span>
+              <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white mt-1 leading-tight"><%= exp.role %></h3>
+              <h4 class="font-heading font-semibold text-sm text-slate-500 dark:text-slate-400 mt-0.5"><%= exp.company %> | <%= exp.type %></h4>
+              
+              <!-- Points list -->
+              <ul class="mt-4 space-y-2 text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed font-normal">
+                <% exp.description.forEach(point => { %>
+                  <li class="flex items-start">
+                    <i class="fas fa-circle-check text-blue-500 mr-2.5 mt-1 text-[11px]"></i>
+                    <span><%= point %></span>
+                  </li>
+                <% }) %>
+              </ul>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-center text-slate-500 font-normal">No internship or job experiences recorded yet.</p>
+      <% } %>
+
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS GALLERY SECTION -->
+<section id="certifications" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Verifications</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">Credentials & Certifications</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal">
+      <% if (certificates && certificates.length > 0) { %>
+        <% certificates.forEach((cert, cIdx) => { %>
+          <div class="bg-slate-50 dark:bg-slate-950 p-5 border border-slate-200/50 dark:border-slate-800/80 rounded-2xl flex flex-col justify-between hover:shadow-md transition-shadow">
+            
+            <div class="space-y-4">
+              <!-- Mock preview icon box if image is empty -->
+              <div class="aspect-video w-full rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-900 flex items-center justify-center">
+                <% if (cert.imageUrl) { %>
+                  <img src="<%= cert.imageUrl %>" alt="<%= cert.name %>" class="w-full h-full object-cover">
+                <% } else { %>
+                  <i class="fas fa-award text-4xl text-blue-500/30"></i>
+                <% } %>
+              </div>
+              <h3 class="font-heading font-bold text-sm text-slate-800 dark:text-white leading-snug"><%= cert.name %></h3>
+              <span class="text-[10px] text-slate-400 block font-medium">Issued: <%= new Date(cert.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></span>
+            </div>
+
+            <div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800/50 pt-4 mt-6">
+              <% if (cert.pdfUrl && cert.pdfUrl !== '#') { %>
+                <a href="<%= cert.pdfUrl %>" download class="text-[11px] font-bold text-slate-500 hover:text-blue-600 transition-colors flex items-center">
+                  <i class="fas fa-download mr-1.5"></i> PDF
+                </a>
+              <% } else { %>
+                <span></span>
+              <% } %>
+              <% if (cert.credentialUrl) { %>
+                <a href="<%= cert.credentialUrl %>" target="_blank" class="text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center">
+                  Verify Credentials
+                  <i class="fas fa-external-link-alt ml-1.5 text-[9px]"></i>
+                </a>
+              <% } %>
+            </div>
+
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="col-span-full text-center text-slate-500 font-normal">Certifications details not available.</p>
+      <% } %>
+    </div>
+
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS SECTION -->
+<section id="achievements" class="py-24 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Milestones</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">Honors & Achievements</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <!-- Achievements timeline cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto reveal">
+      <% if (achievements && achievements.length > 0) { %>
+        <% achievements.forEach((ach, aIdx) => { %>
+          <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm hover:shadow-md border border-slate-100 dark:border-slate-800/80 transition-all duration-200 flex items-start space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-yellow-100/80 text-yellow-600 dark:bg-yellow-950/20 dark:text-yellow-500 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-trophy text-lg"></i>
+            </div>
+            
+            <div class="space-y-1.5">
+              <span class="text-[10px] text-slate-400 font-bold"><%= new Date(ach.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></span>
+              <h3 class="font-heading font-bold text-sm sm:text-base text-slate-900 dark:text-white leading-tight"><%= ach.title %></h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 font-normal leading-relaxed"><%= ach.description %></p>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="col-span-full text-center text-slate-500 font-normal">Achievements list database is empty.</p>
+      <% } %>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIALS SECTION -->
+<section id="testimonials" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">References</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">Recommendations & Testimonials</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <!-- Recommendations slider carousel -->
+    <div class="max-w-3xl mx-auto reveal">
+      <% if (testimonials && testimonials.length > 0) { %>
+        <div class="relative overflow-hidden bg-slate-50 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800/80 p-8 sm:p-12 rounded-3xl text-center">
+          
+          <!-- Large quote symbol -->
+          <i class="fas fa-quote-right text-5xl text-blue-500/10 dark:text-blue-500/5 absolute top-6 right-6"></i>
+
+          <!-- Slides wrapper -->
+          <div class="space-y-6">
+            <% testimonials.forEach((t, index) => { %>
+              <div class="testimonial-slide <%= index === 0 ? 'block' : 'hidden' %>" id="slide-<%= index %>">
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal italic">
+                  "<%= t.feedback %>"
+                </p>
+                <div class="flex items-center justify-center mt-6 space-x-3.5">
+                  <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
+                    <% if (t.avatar) { %>
+                      <img src="<%= t.avatar %>" alt="<%= t.clientName %>" class="w-full h-full object-cover">
+                    <% } else { %>
+                      <div class="w-full h-full flex items-center justify-center bg-blue-100 text-blue-600 text-xs font-bold"><%= t.clientName.substring(0,2) %></div>
+                    <% } %>
+                  </div>
+                  <div class="text-left leading-none">
+                    <h4 class="font-heading font-bold text-sm text-slate-800 dark:text-white"><%= t.clientName %></h4>
+                    <span class="text-[10px] text-slate-400 font-medium mt-1 block"><%= t.designation %></span>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+
+          <!-- Carousel Dots navigation -->
+          <% if (testimonials.length > 1) { %>
+            <div class="flex justify-center space-x-2 mt-8">
+              <% testimonials.forEach((t, index) => { %>
+                <button onclick="showSlide(<%= index %>)" class="w-2.5 h-2.5 rounded-full transition-all duration-300 <%= index === 0 ? 'bg-blue-600 w-5' : 'bg-slate-300 dark:bg-slate-700' %>" id="dot-<%= index %>"></button>
+              <% }) %>
+            </div>
+            
+            <script>
+              let currentSlideIdx = 0;
+              const slidesCount = <%= testimonials.length %>;
+              
+              function showSlide(idx) {
+                for (let i = 0; i < slidesCount; i++) {
+                  const slide = document.getElementById(`slide-${i}`);
+                  const dot = document.getElementById(`dot-${i}`);
+                  if (slide && dot) {
+                    if (i === idx) {
+                      slide.classList.remove('hidden');
+                      slide.classList.add('block');
+                      dot.classList.add('bg-blue-600', 'w-5');
+                      dot.classList.remove('bg-slate-300', 'dark:bg-slate-700');
+                    } else {
+                      slide.classList.remove('block');
+                      slide.classList.add('hidden');
+                      dot.classList.remove('bg-blue-600', 'w-5');
+                      dot.classList.add('bg-slate-300', 'dark:bg-slate-700');
+                    }
+                  }
+                }
+                currentSlideIdx = idx;
+              }
+
+              // Auto play carousel (every 6 seconds)
+              setInterval(() => {
+                let next = (currentSlideIdx + 1) % slidesCount;
+                showSlide(next);
+              }, 6000);
+            </script>
+          <% } %>
+
+        </div>
+      <% } else { %>
+        <p class="text-center text-slate-500 font-normal">No client recommendations recorded yet.</p>
+      <% } %>
+    </div>
+
+    <!-- Feedback button -->
+    <div class="text-center mt-12 reveal">
+      <button onclick="openFeedbackModal()" class="inline-flex items-center px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/10 active:scale-95 transition-all">
+        <i class="fas fa-pen-fancy mr-2.5"></i> Write a Review / Share Feedback
+      </button>
+    </div>
+
+    <!-- Feedback Submission Modal -->
+    <div id="feedback-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 p-4 sm:p-6 items-center justify-center animate-fade-in" onclick="closeFeedbackModal(event)">
+      <div class="bg-white dark:bg-slate-900 max-w-md w-full rounded-3xl border border-slate-200/50 dark:border-slate-800/80 shadow-2xl overflow-hidden flex flex-col" onclick="event.stopPropagation()">
+        
+        <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/30">
+          <h3 class="font-heading font-extrabold text-base text-slate-900 dark:text-white">Share Your Feedback</h3>
+          <button onclick="hideFeedbackModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 rounded-lg"><i class="fas fa-times text-lg"></i></button>
+        </div>
+        
+        <form id="public-feedback-form" class="p-6 space-y-4 text-xs sm:text-sm">
+          <div>
+            <label for="feedback-name" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Your Name</label>
+            <input type="text" id="feedback-name" placeholder="e.g. Jane Doe" class="w-full p-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          </div>
+
+          <div>
+            <label for="feedback-designation" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Designation / Role (Optional)</label>
+            <input type="text" id="feedback-designation" placeholder="e.g. Project Partner or Tech Lead" class="w-full p-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+
+          <div>
+            <label for="feedback-text" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Your Feedback</label>
+            <textarea id="feedback-text" rows="4" placeholder="Share your experience working with Sunny..." class="w-full p-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+          </div>
+
+          <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+            <button type="button" onclick="hideFeedbackModal()" class="px-4 py-2 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800">Cancel</button>
+            <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center transition-colors">
+              Submit Feedback
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Feedback script helper -->
+    <script>
+      function openFeedbackModal() {
+        const modal = document.getElementById('feedback-modal');
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function hideFeedbackModal() {
+        const modal = document.getElementById('feedback-modal');
+        if (modal) {
+          modal.classList.remove('flex');
+          modal.classList.add('hidden');
+          document.body.style.overflow = 'auto';
+        }
+      }
+
+      function closeFeedbackModal(event) {
+        hideFeedbackModal();
+      }
+
+      document.getElementById('public-feedback-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        const clientName = document.getElementById('feedback-name').value;
+        const designation = document.getElementById('feedback-designation').value;
+        const feedback = document.getElementById('feedback-text').value;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1.5"></i> Submitting...';
+
+        try {
+          const response = await fetch('/feedback', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ clientName, designation, feedback })
+          });
+          
+          const data = await response.json();
+          if (data.success) {
+            alert(data.message);
+            e.target.reset();
+            hideFeedbackModal();
+          } else {
+            throw new Error(data.message || 'Submission failed');
+          }
+        } catch (error) {
+          alert('Error: ' + error.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      });
+    </script>
+
+  </div>
+</section>
+
+<!-- RECENT BLOGS SECTION -->
+<section class="py-24 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Articles</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">Recent Tech Blogs</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <!-- Blogs grid list -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 reveal">
+      <% if (blogs && blogs.length > 0) { %>
+        <% blogs.forEach(blog => { %>
+          <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+            
+            <div class="aspect-video bg-slate-200 dark:bg-slate-950 overflow-hidden relative flex-shrink-0">
+              <% if (blog.coverImage) { %>
+                <img src="<%= blog.coverImage %>" alt="<%= blog.title %>" class="w-full h-full object-cover">
+              <% } else { %>
+                <div class="w-full h-full bg-gradient-to-tr from-blue-100 to-purple-100 dark:from-slate-950 dark:to-slate-800 flex items-center justify-center">
+                  <i class="fas fa-file-invoice text-4xl text-blue-500/20"></i>
+                </div>
+              <% } %>
+            </div>
+
+            <div class="p-6 flex-grow flex flex-col justify-between">
+              <div>
+                <span class="text-[10px] text-slate-400 font-bold"><%= new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                <h3 class="font-heading font-bold text-base text-slate-800 dark:text-white mt-1.5 hover:text-blue-600 transition-colors leading-tight">
+                  <a href="/blogs/<%= blog.slug %>"><%= blog.title %></a>
+                </h3>
+                
+                <div class="flex flex-wrap gap-1.5 mt-3">
+                  <% blog.tags.forEach(tag => { %>
+                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-500 dark:text-slate-400 font-semibold rounded">#<%= tag %></span>
+                  <% }) %>
+                </div>
+              </div>
+
+              <a href="/blogs/<%= blog.slug %>" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-bold text-xs mt-6 flex items-center transition-colors">
+                Read Article
+                <i class="fas fa-chevron-right ml-1 text-[9px]"></i>
+              </a>
+            </div>
+
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="col-span-full text-center text-slate-500 font-normal">Blogs database has no articles posted yet.</p>
+      <% } %>
+    </div>
+
+    <!-- View all blogs link -->
+    <div class="text-center reveal">
+      <a href="/blogs" class="inline-flex items-center text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 transition-colors">
+        Browse All Tech Blogs
+        <i class="fas fa-arrow-right ml-2 text-xs"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Heading -->
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Collaboration</span>
+      <h2 class="font-heading font-extrabold text-3xl sm:text-5xl mt-2 text-slate-900 dark:text-white">Get In Touch</h2>
+      <div class="w-16 h-1.5 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-5xl mx-auto items-start">
+      
+      <!-- Contact links details -->
+      <div class="lg:col-span-5 space-y-6 reveal">
+        <h3 class="font-heading font-bold text-2xl text-slate-800 dark:text-white">Let's discuss a project or opportunity!</h3>
+        <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed font-normal">
+          Fill out the form or reach out directly via my email or socials. I look forward to connecting with you.
+        </p>
+
+        <div class="space-y-4 pt-4">
+          <!-- Card 1: Email -->
+          <div class="flex items-start space-x-4">
+            <div class="w-11 h-11 bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-xl flex-shrink-0">
+              <i class="fas fa-envelope text-lg"></i>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Email Me</span>
+              <a href="mailto:<%= profile.email %>" class="text-sm font-semibold text-slate-800 dark:text-white hover:text-blue-600 transition-colors mt-0.5 block"><%= profile.email %></a>
+            </div>
+          </div>
+
+          <!-- Card 2: Phone -->
+          <% if (profile.phone) { %>
+            <div class="flex items-start space-x-4">
+              <div class="w-11 h-11 bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-xl flex-shrink-0">
+                <i class="fas fa-phone text-lg"></i>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Call Me</span>
+                <a href="tel:<%= profile.phone %>" class="text-sm font-semibold text-slate-800 dark:text-white hover:text-blue-600 transition-colors mt-0.5 block"><%= profile.phone %></a>
+              </div>
+            </div>
+          <% } %>
+
+          <!-- Card 3: Address -->
+          <% if (profile.address) { %>
+            <div class="flex items-start space-x-4">
+              <div class="w-11 h-11 bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-xl flex-shrink-0">
+                <i class="fas fa-map-marker-alt text-lg"></i>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Location</span>
+                <span class="text-sm font-semibold text-slate-800 dark:text-white mt-0.5 block"><%= profile.address %></span>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- AJAX Form panel -->
+      <div class="lg:col-span-7 bg-slate-50 dark:bg-slate-950/40 p-6 sm:p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 reveal">
+        <form id="contact-form" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="contact-name" class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Your Name</label>
+              <input type="text" id="contact-name" placeholder="John Doe" class="w-full text-sm px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <div>
+              <label for="contact-email" class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Your Email</label>
+              <input type="email" id="contact-email" placeholder="john@example.com" class="w-full text-sm px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+          </div>
+
+          <div>
+            <label for="contact-subject" class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Subject</label>
+            <input type="text" id="contact-subject" placeholder="Project collaboration proposal..." class="w-full text-sm px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+
+          <div>
+            <label for="contact-message" class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Your Message</label>
+            <textarea id="contact-message" rows="5" placeholder="Hi Sunny, I'd love to chat about a job opportunity..." class="w-full text-sm px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-500/10 active:scale-95 transition-all duration-200 flex items-center justify-center">
+            <i class="fas fa-paper-plane mr-2.5"></i>
+            Send Message
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Global Message Success & Error toasts -->
+<div id="contact-success-toast" class="hidden fixed bottom-6 left-6 z-50 glass px-6 py-4 rounded-2xl shadow-2xl border border-green-500/30 flex items-center space-x-3.5 animate-slide-in-right">
+  <div class="w-8 h-8 bg-green-100 dark:bg-green-950 text-green-600 dark:text-green-400 flex items-center justify-center rounded-full"><i class="fas fa-check"></i></div>
+  <div>
+    <h5 class="text-sm font-extrabold font-heading text-slate-800 dark:text-white">Message Dispatched!</h5>
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Your inquiry is logged and email alert sent successfully.</p>
+  </div>
+</div>
+
+<div id="contact-error-toast" class="hidden fixed bottom-6 left-6 z-50 glass px-6 py-4 rounded-2xl shadow-2xl border border-red-500/30 flex items-center space-x-3.5 animate-slide-in-right">
+  <div class="w-8 h-8 bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 flex items-center justify-center rounded-full"><i class="fas fa-times"></i></div>
+  <div>
+    <h5 class="text-sm font-extrabold font-heading text-slate-800 dark:text-white">Dispatch Failed!</h5>
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" id="contact-error-text">Failed to save message to database.</p>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

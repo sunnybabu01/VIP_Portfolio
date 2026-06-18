@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title><%= typeof title !== 'undefined' ? title + ' | ' : '' %>Sunny Ranjan - Software Developer Portfolio</title>
+  <meta name="description" content="<%= typeof description !== 'undefined' ? description : "Sunny Ranjan B.Tech CSIT (2023-2027) software developer portfolio site. View skills, projects, and certifications." %>">
+  <meta name="keywords" content="Sunny Ranjan, Software Developer, SIRT B.tech CSIT, Portfolio CMS, Crypto Detection SIH, Snapcart, AI Assistant">
+  <meta name="author" content="Sunny Ranjan">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : "Sunny Ranjan - Software Developer" %>">
+  <meta property="og:description" content="Explore my software projects, web services, and tech competencies.">
+  <meta property="og:image" content="<%= typeof profile !== 'undefined' && profile.profileImage ? profile.profileImage : '/images/profile-placeholder.jpg' %>">
+  <meta property="og:url" content="https://sunnyranjan.com">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sunny Ranjan - Software Developer Portfolio">
+  <meta name="twitter:description" content="Explore my portfolio, academic achievements, and software design milestones.">
+  
+  <!-- PWA Support -->
+  <meta name="theme-color" content="#2563eb">
+  <link rel="icon" type="image/png" href="/images/favicon.png?v=1.1">
+
+  <!-- CSS Inclusions -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Structured Data JSON-LD for SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Sunny Ranjan",
+      "jobTitle": "Software Developer",
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Sagar Institute of Research and Technology (SIRT), Bhopal"
+      },
+      "knowsAbout": ["Java", "Python", "JavaScript", "TypeScript", "Next.js", "Express.js", "MongoDB", "AI/ML"],
+      "url": "https://sunnyranjan.com"
+    }
+  </script>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 flex flex-col">
+
+  <!-- Header / Navigation Bar -->
+  <header class="fixed top-0 left-0 w-full z-40 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Logo -->
+        <a href="/" class="flex items-center space-x-2 font-heading font-extrabold text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 hover:scale-95 transition-transform duration-200">
+          <span>Sunny Ranjan</span>
+        </a>
+
+        <!-- Desktop Menu -->
+        <nav class="hidden md:flex items-center space-x-8 font-medium text-sm text-slate-600 dark:text-slate-300">
+          <a href="/#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+          <a href="/#skills" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Skills</a>
+          <a href="/#projects" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Projects</a>
+          <a href="/#experience" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Experience</a>
+          <a href="/#certifications" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Certificates</a>
+          <a href="/blogs" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Blogs</a>
+          <a href="/gallery" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Gallery</a>
+          <a href="/#contact" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
+        </nav>
+
+        <!-- Right Side controls (Theme and CTA button) -->
+        <div class="hidden md:flex items-center space-x-4">
+          <!-- Light/Dark Mode Switcher -->
+          <button id="theme-toggle" type="button" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none rounded-lg text-sm p-2.5 transition-colors">
+            <i id="theme-toggle-dark-icon" class="fas fa-moon hidden w-5 h-5 flex items-center justify-center"></i>
+            <i id="theme-toggle-light-icon" class="fas fa-sun hidden w-5 h-5 flex items-center justify-center"></i>
+          </button>
+          
+          <a href="/#contact" class="bg-blue-600 text-white font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-blue-700 shadow-md shadow-blue-500/20 active:scale-95 transition-all duration-200">
+            Let's Talk
+          </a>
+        </div>
+
+        <!-- Mobile hamburger menu btn -->
+        <div class="flex items-center space-x-2 md:hidden">
+          <button id="theme-toggle-mobile" onclick="document.getElementById('theme-toggle').click()" class="text-slate-500 dark:text-slate-400 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fas fa-circle-half-stroke"></i>
+          </button>
+          <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Menu Container -->
+    <div id="mobile-menu" class="hidden md:hidden glass border-b border-slate-200 dark:border-slate-800 py-4 px-6 animate-fade-in">
+      <nav class="flex flex-col space-y-4 font-semibold text-base text-slate-700 dark:text-slate-300">
+        <a href="/#about" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-blue-600 transition-colors">About</a>
+        <a href="/#skills" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-blue-600 transition-colors">Skills</a>
+        <a href="/#projects" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-blue-600 transition-colors">Projects</a>
+        <a href="/#experience" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-blue-600 transition-colors">Experience</a>
+        <a href="/#certifications" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-blue-600 transition-colors">Certificates</a>
+        <a href="/blogs" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-blue-600 transition-colors">Blogs</a>
+        <a href="/gallery" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-blue-600 transition-colors">Gallery</a>
+        <a href="/#contact" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-blue-600 transition-colors">Contact</a>
+        
+        <a href="/#contact" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="w-full text-center bg-blue-600 text-white py-2.5 rounded-full font-bold">
+          Hire Sunny
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Content Area -->
+  <main class="flex-grow pt-16 sm:pt-20">
