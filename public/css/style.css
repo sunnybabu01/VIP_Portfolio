@@ -166,3 +166,61 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .dark .hover-card-3d:hover {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
+
+/* Chatbot UI Animation Utilities */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Chatbot Content Typography & Spacing */
+.chatbot-bubble-content {
+  line-height: 1.5;
+}
+.chatbot-bubble-content strong {
+  font-weight: 700;
+}
+.chatbot-bubble-content p {
+  margin-bottom: 0.5rem;
+}
+.chatbot-bubble-content p:last-child {
+  margin-bottom: 0;
+}
+.chatbot-bubble-content ul, .chatbot-bubble-content ol {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  padding-left: 1.25rem;
+}
+.chatbot-bubble-content li {
+  margin-bottom: 0.35rem;
+  list-style-type: disc;
+}
+.chatbot-bubble-content pre {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}

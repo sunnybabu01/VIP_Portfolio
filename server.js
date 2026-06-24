@@ -62,5 +62,6 @@ app.use((err, req, res, next) => {
 // Start Server Listeners
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server executing in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  console.log(`Server executing in ${process.env.NODE_ENV || 'development'} mode.`);
+  console.log(`Local Website URL: http://localhost:${PORT}`);
 });

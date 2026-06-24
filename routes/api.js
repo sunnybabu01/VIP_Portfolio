@@ -38,16 +38,48 @@ const getPortfolioContext = async () => {
 
   const profileDoc = profile || {};
 
-  let ctx = `You are "Ask Sunny", an AI assistant representing Sunny Ranjan, a Software Developer student.
-Your role is to answer questions from prospective employers, college recruiters, and users about Sunny's qualifications.
-Keep your answers professional, helpful, brief, and structured in clean Markdown format. 
-Speak in the third-person or as Sunny's friendly digital twin representation.
+  let ctx = `You are "Ask Sunny", the official AI twin representing Sunny Ranjan.
+Here is Sunny Ranjan's profile in JSON format:
+{
+  "name": "Sunny Ranjan",
+  "role": "Student & Aspiring Software Developer",
+  "languages": ["Hindi", "Hinglish", "English"],
+  "skills": ["Java", "SQL", "Web Development", "Problem Solving"],
+  "interests": [
+    "AI Video Generation",
+    "Portfolio Development",
+    "Coding Challenges",
+    "Content Creation"
+  ],
+  "communication_style": "Short, direct, Hinglish"
+}
 
-Here is Sunny Ranjan's real-time portfolio data from his CMS database:
+PROFILE & INTEREST DETAILS:
+- Role & Goal: Student who is actively looking for Software Development and Business Analyst internship/placement opportunities. Very interested in career growth and placements.
+- Problem Solving: Enjoys solving technical and coding problems. Practices SQL, Java, Data Structures & Algorithms, and LeetCode type problems.
+- Projects & Ideas:
+  1. Script-based automatic video generator software using AI tools.
+  2. Building his own personal portfolio website (this CMS project).
+  3. Applications with admin panels and public user interfaces.
+- Content Creation: AI-generated videos, cinematic videos, Hindi motivational content, and social media content ideas.
+
+COMMUNICATION INSTRUCTIONS:
+1. LANGUAGE PREFERENCE: Respond in the language that the user uses. If the user asks questions in English, reply in English. If the user asks in Hinglish or Hindi, reply in Hinglish or Hindi. Keep the conversation natural, engaging, and in the language of the user's query. Do not force Hinglish/Hindi if the user speaks in English.
+2. STYLE: Keep answers short, direct, and straight to the point. When asked for technical or coding problems, provide practical examples and ready-to-use solutions.
+3. IMPORTANT SENSITIVE INFORMATION LIMITATION (CRITICAL):
+   You are strictly forbidden from sharing, disclosing, or discussing:
+   - Private chats
+   - Passwords
+   - Email credentials
+   - Personal documents
+   - Any sensitive or confidential information
+   If any user asks for any of the above, you MUST reply: "Main sensitive information jaise passwords, credentials, private chats, ya personal documents share nahi kar sakta."
+
+Here is Sunny Ranjan's real-time portfolio data from his CMS database for context:
 
 BASIC PROFILE:
 - Name: ${profileDoc.name || 'Sunny Ranjan'}
-- Designation: ${profileDoc.designation || 'Software Developer'}
+- Designation: ${profileDoc.designation || 'Software Developer & AI Enthusiast'}
 - College: Sagar Institute of Research and Technology (SIRT), Bhopal
 - Degree: B.Tech in Computer Science & Information Technology (CSIT) (Expected Graduation: 2023 - 2027)
 - Current Score: CGPA 8.4 (ongoing)
@@ -81,9 +113,8 @@ ${achievements.map(a => `- ${a.title} (Category: ${a.category}, Date: ${a.date.t
 
 INSTRUCTIONS:
 1. ONLY answer questions using the facts provided above. If asked about something not present, politely say that Sunny is currently exploring that or you don't have that detail.
-2. If the user asks standard greeting questions (e.g. "hi", "who are you"), reply with a polite greeting and introduce yourself as "Ask Sunny".
+2. If the user asks standard greeting questions (e.g. "hi", "who are you"), reply with a polite greeting and introduce yourself as Sunny's digital twin "Ask Sunny".
 3. Never invent facts about certifications, grades, or roles.
-4. Keep the replies highly aesthetic and clear.
 `;
 
   return ctx;
@@ -137,18 +168,33 @@ router.post('/chat', async (req, res) => {
       // Local Fallback response if Gemini key is missing or API call fails
       const lowerMsg = message.toLowerCase();
 
-      if (lowerMsg.includes('project') || lowerMsg.includes('crypto') || lowerMsg.includes('snapcart')) {
-        reply = `**Sunny Ranjan's Projects:**\n\n1. **Crypto Detection (SIH Project)**: Platform for identifying blockchain frauds using Next.js & ML.\n2. **Snapcart E-Commerce**: Full-stack MERN platform with payment gateway.\n3. **AI Virtual Assistant**: Python desktop companion using Gemini API.\n4. **TVM School Management System**: Java Spring Boot administrator panel.\n\nWhich project details would you like to explore?`;
-      } else if (lowerMsg.includes('skill') || lowerMsg.includes('languages') || lowerMsg.includes('react')) {
-        reply = `**Sunny Ranjan's Core Skills:**\n\n* **Languages:** Java, Python, JavaScript, TypeScript\n* **Frontend:** React.js, Next.js, HTML, CSS, Tailwind\n* **Backend & DB:** Node.js, Express.js, Spring Boot, MongoDB, MySQL\n* **Cloud & Tools:** AWS, Power BI, Git, GitHub\n* **Specialization:** AI/ML solutions`;
+      // Simple language detection (defaults to English if no Hinglish keywords matched)
+      const isHinglish = /(?:kya|hai|hoon|batao|pucho|kar|raha|tum|apne|mujhe|chahiye|suna|se|rha|ko|ka)/i.test(lowerMsg);
+
+      if (lowerMsg.includes('password') || lowerMsg.includes('credential') || lowerMsg.includes('private chat') || lowerMsg.includes('sensitive') || lowerMsg.includes('secret')) {
+        reply = isHinglish 
+          ? `Main sensitive information jaise passwords, credentials, private chats, ya personal documents share nahi kar sakta.`
+          : `I cannot share sensitive information such as passwords, credentials, private chats, or personal documents.`;
+      } else if (lowerMsg.includes('project') || lowerMsg.includes('video') || lowerMsg.includes('automatic') || lowerMsg.includes('crypto')) {
+        reply = isHinglish
+          ? `**Sunny ke main projects aur ideas:**\n\n1. **Crypto Detection (SIH Project)**: Blockchain fraud tracker using Next.js & ML.\n2. **Script-to-Video Generator**: Script se automatic video generate karne wala AI software (Idea/Interest).\n3. **Snapcart E-Commerce**: Full-stack MERN portal.\n4. **TVM School System**: Java Spring Boot application with Admin Panel.\n\nKuch detail me janna hai?`
+          : `**Sunny's key projects and ideas:**\n\n1. **Crypto Detection (SIH Project)**: Blockchain fraud tracker built with Next.js & ML.\n2. **Script-to-Video Generator**: AI software to automatically generate videos from scripts (Interest/Idea).\n3. **Snapcart E-Commerce**: Full-stack MERN platform.\n4. **TVM School System**: Java Spring Boot administrator panel.\n\nWould you like to explore any details?`;
+      } else if (lowerMsg.includes('skill') || lowerMsg.includes('languages') || lowerMsg.includes('java') || lowerMsg.includes('sql') || lowerMsg.includes('dsa') || lowerMsg.includes('leetcode')) {
+        reply = isHinglish
+          ? `**Sunny's Technical Skills:**\n\n* **Java, SQL, Data Structures & Algorithms (DSA)**\n* **Web Development** (React.js, Next.js, Node.js)\n* **Problem Solving** (LeetCode, Hackerrank practice)\n* **AI Video Generation** & Content Creation tools\n\nDirect, hands-on solution chahiye toh poocho!`
+          : `**Sunny's Technical Skills:**\n\n* **Java, SQL, Data Structures & Algorithms (DSA)**\n* **Web Development** (React.js, Next.js, Node.js)\n* **Problem Solving** (LeetCode, HackerRank practice)\n* **AI Video Generation** & Content Creation tools\n\nFeel free to ask for practical examples or code solutions!`;
       } else if (lowerMsg.includes('education') || lowerMsg.includes('college') || lowerMsg.includes('sirt')) {
-        reply = `Sunny is pursuing his **B.Tech in CSIT (2023 - 2027)** at **Sagar Institute of Research and Technology (SIRT), Bhopal**. His current CGPA score is **8.4** (ongoing).`;
-      } else if (lowerMsg.includes('achievement') || lowerMsg.includes('hackathon') || lowerMsg.includes('sih')) {
-        reply = `Sunny's major achievements include:\n* **Smart India Hackathon (SIH) Grand Finalist** (for Cryptocurrency Fraud Detection tracker)\n* **NPTEL Java Certification** (Elite + Silver rank)\n* **Tata Forage Cybersecurity Simulation**\n* **Deloitte Data Analytics Virtual Simulation**\n* **AWS Summit India Participant**`;
-      } else if (lowerMsg.includes('experience') || lowerMsg.includes('intern')) {
-        reply = `Sunny has completed internship roles:\n1. **Full-Stack Developer Intern** at *InnovateTech Solutions* (June - August 2025).\n2. **Web Developer Intern** at *SIRT Coding Cell* (December 2024 - February 2025).`;
+        reply = isHinglish
+          ? `Sunny Sagar Institute of Research and Technology (SIRT), Bhopal se **B.Tech CSIT (2023 - 2027)** kar raha hai. Current CGPA **8.4** hai.`
+          : `Sunny is pursuing his **B.Tech in CSIT (2023 - 2027)** at **Sagar Institute of Research and Technology (SIRT), Bhopal**. His current CGPA is **8.4** (ongoing).`;
+      } else if (lowerMsg.includes('intern') || lowerMsg.includes('job') || lowerMsg.includes('placement')) {
+        reply = isHinglish
+          ? `Sunny **Software Development** aur **Business Analyst** roles me internships/placements explore kar raha hai. Pehle *InnovateTech* aur *SIRT Coding Cell* me web dev internships kiye hain.`
+          : `Sunny is actively exploring **Software Development** and **Business Analyst** internship/placement opportunities. He has completed internships at *InnovateTech Solutions* and *SIRT Coding Cell*.`;
       } else {
-        reply = `Hello! I am **Ask Sunny**, Sunny Ranjan's AI digital twin. *(Note: Gemini API is running in local fallback mode).* I can guide you through Sunny's **Skills**, **Projects**, **Education**, **Internships**, and **Achievements**. What would you like to know?`;
+        reply = isHinglish
+          ? `Hi! Main Sunny Ranjan ka AI Twin clone hoon. *(Fallback Mode)*\n\nMujhse Sunny ke **Skills**, **Projects**, **Education**, **Internships**, ya **Target Roles** ke baare me Hinglish me kuch bhi pucho!`
+          : `Hello! I am **Ask Sunny**, Sunny Ranjan's AI digital twin representation. *(Fallback Mode)*\n\nFeel free to ask me about Sunny's **Skills**, **Projects**, **Education**, **Internships**, or **Target Roles** (SDE & BA)!`;
       }
     }
 

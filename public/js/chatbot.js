@@ -105,20 +105,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // Helper to append message bubble to UI
   function appendMessage(text, role) {
     const bubble = document.createElement('div');
-    bubble.className = `flex mb-3 ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+    bubble.className = `flex mb-4 ${role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`;
 
     let parsedHtml = '';
     if (role === 'error') {
-      parsedHtml = `<div class="bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-300 text-sm max-w-[80%] rounded-2xl px-4 py-2 border border-red-200 dark:border-red-800">${text}</div>`;
+      parsedHtml = `<div class="bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-300 text-sm max-w-[80%] rounded-2xl px-4 py-2 border border-red-200 dark:border-red-800 shadow-sm">${text}</div>`;
     } else if (role === 'user') {
-      parsedHtml = `<div class="bg-blue-600 text-white text-sm max-w-[80%] rounded-2xl rounded-tr-none px-4 py-2 shadow-sm">${escapeHtml(text)}</div>`;
+      parsedHtml = `<div class="bg-gradient-to-br from-blue-600 to-indigo-600 text-white text-sm max-w-[80%] rounded-2xl rounded-tr-none px-4 py-2.5 shadow-md shadow-blue-500/15 leading-relaxed">${escapeHtml(text)}</div>`;
     } else {
       // Model / AI Response: parse Markdown
       const htmlContent = parseMarkdown(text);
       parsedHtml = `
         <div class="flex items-start max-w-[85%]">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white text-xs mr-2 flex-shrink-0 shadow-sm font-heading">S</div>
-          <div class="bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100 text-sm rounded-2xl rounded-tl-none px-4 py-2 shadow-sm border border-gray-200/50 dark:border-gray-700/50 leading-relaxed font-normal overflow-x-auto select-text prose prose-sm dark:prose-invert">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white text-xs mr-2.5 flex-shrink-0 shadow-md font-heading ring-2 ring-blue-500/20">S</div>
+          <div class="bg-slate-100 dark:bg-slate-850 text-slate-800 dark:text-slate-100 text-sm rounded-2xl rounded-tl-none px-4 py-2.5 shadow-sm border border-slate-200/60 dark:border-slate-800/60 leading-relaxed font-normal overflow-x-auto select-text chatbot-bubble-content">
+            <p class="font-semibold text-xs text-blue-600 dark:text-blue-400 mb-1 flex items-center">
+              <i class="fas fa-magic mr-1 text-[10px]"></i> AI Twin
+            </p>
             ${htmlContent}
           </div>
         </div>
@@ -134,14 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = `loading-${Date.now()}`;
     const bubble = document.createElement('div');
     bubble.id = id;
-    bubble.className = 'flex mb-3 justify-start';
+    bubble.className = 'flex mb-4 justify-start';
     bubble.innerHTML = `
       <div class="flex items-start max-w-[80%]">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white text-xs mr-2 flex-shrink-0 font-heading">S</div>
-        <div class="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-tl-none px-4 py-3 flex space-x-1.5 items-center">
-          <div class="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-          <div class="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style="animation-delay: 0.25s"></div>
-          <div class="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white text-xs mr-2.5 flex-shrink-0 shadow-md font-heading ring-2 ring-blue-500/20">S</div>
+        <div class="bg-slate-100/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl rounded-tl-none px-4 py-3.5 flex space-x-1.5 items-center border border-slate-200/60 dark:border-slate-800/60 shadow-sm">
+          <div class="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+          <div class="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.25s"></div>
+          <div class="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
         </div>
       </div>
     `;
