@@ -34,24 +34,35 @@ npm install
 ### 3. Environment Configuration
 Create a `.env` file in the root directory and populate it:
 ```env
+# Server Configuration
 PORT=5000
 NODE_ENV=development
-JWT_SECRET=your_jwt_secret_key
-SESSION_SECRET=your_session_secret_key
+JWT_SECRET=super_secret_jwt_token_for_sunny_ranjan_portfolio
+SESSION_SECRET=another_super_secret_session_key
 
-# Database Connection (MongoDB Atlas)
-MONGODB_URI=your_mongodb_connection_string
+# Database Configuration
+MONGODB_URI=mongodb+srv://sunny824118_db_user:dzknMfNwOznZVZ8y@cluster0.dsaxoct.mongodb.net/vip_portfolio
 
-# Nodemailer Configuration (Gmail App Password)
-SMTP_HOST=smtp.gmail.com
+# Admin Credentials
+ADMIN_USERNAME=admin
+ADMIN_EMAIL=sunny824118@gmail.com
+ADMIN_PASSWORD=Sunnyranjan@0448
+
+# Cloudinary Configuration
+CLOUDINARY_CLOUD_NAME=dhd9nwxb7
+CLOUDINARY_API_KEY=474982555587598
+CLOUDINARY_API_SECRET=KFqNHQNDazB1UCJASym5jjI4szk
+
+# Nodemailer Configuration
+SMTP_HOST=sunny824118@gmail.com
 SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_gmail_app_password
-CONTACT_RECEIVER_EMAIL=your_email@gmail.com
+SMTP_USER=sunny824118@gmail.com
+SMTP_PASS=tegvqhyusmiylvhw
+CONTACT_RECEIVER_EMAIL=sunny824118@gmail.com
 
-# Gemini AI Key
-GEMINI_API_KEY=your_gemini_api_key
-```
+# Gemini AI API Configuration
+GEMINI_API_KEY=AQ.Ab8RN6I1Av9yuigRvlCrrqvCQXJiVTOID1_OXFPdheXzkR-i1w
+
 
 ### 4. Seed Database
 Seeding the database will create default portfolio records and set up your default admin login credentials:
