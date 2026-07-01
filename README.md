@@ -44,9 +44,7 @@ SESSION_SECRET=another_super_secret_session_key
 MONGODB_URI=mongodb+srv://sunny824118_db_user:dzknMfNwOznZVZ8y@cluster0.dsaxoct.mongodb.net/vip_portfolio
 
 # Admin Credentials
-ADMIN_USERNAME=admin
-ADMIN_EMAIL=sunny824118@gmail.com
-ADMIN_PASSWORD=Sunnyranjan@0448
+
 
 # Cloudinary Configuration
 CLOUDINARY_CLOUD_NAME=dhd9nwxb7
